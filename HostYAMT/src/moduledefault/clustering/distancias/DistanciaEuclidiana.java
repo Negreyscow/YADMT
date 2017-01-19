@@ -20,6 +20,7 @@ public class DistanciaEuclidiana {
 
     Base base;
     double[][] matrizDistancias;
+    int useless = 0;
 
     public DistanciaEuclidiana(Base teste) {
         base = teste.copy();
