@@ -127,6 +127,7 @@ public final class ACOClustering {
 
     public void set_cont2(int colunas, int linhas) throws IOException {
         cont2 = 150 * (colunas) * linhas;
+        //cont2 = 10000;
     }
 
     public int getCont2() {
