@@ -25,10 +25,11 @@ public class JFrameFormigas extends javax.swing.JFrame {
         initComponents();
         setSigma(Integer.parseInt(this.textSigma.getText()));
         setSigmaMaximo(Integer.parseInt(this.textSigmaMaximo.getText()));
-        setSigmaMinimo(Integer.parseInt(this.textSigmaMinimo.getText()));
+        setSigmaMinimo(Integer.parseInt(this.textControleSigma.getText()));
         setSigmaControle(Integer.parseInt(this.textControleSigma.getText()));
         setAlfa(Double.parseDouble(this.textAlfa.getText()));
         setAlfaMaximo(Double.parseDouble(this.textAlfaMaximo.getText()));
+        setIteracoes(Integer.parseInt(this.textIteracoes.getText()));
         setAlfaMinimo(Double.parseDouble(this.textAlfaMinimo.getText()));
         setAlfaControle(Double.parseDouble(this.textControleAlfa.getText()));
         setFase(Double.parseDouble(this.textFase.getText()));
@@ -41,6 +42,7 @@ public class JFrameFormigas extends javax.swing.JFrame {
     int sigmaMaximo;
     int sigmaMinimo;
     int sigmaControle;
+    int iteracoes;
     double alfa;
     double alfaMaximo;
     double alfaMinimo;
@@ -63,7 +65,6 @@ public class JFrameFormigas extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -72,13 +73,14 @@ public class JFrameFormigas extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         textSigma = new javax.swing.JTextField();
         textSigmaMaximo = new javax.swing.JTextField();
-        textSigmaMinimo = new javax.swing.JTextField();
         textControleSigma = new javax.swing.JTextField();
         textAlfa = new javax.swing.JTextField();
         textAlfaMaximo = new javax.swing.JTextField();
         textAlfaMinimo = new javax.swing.JTextField();
         textControleAlfa = new javax.swing.JTextField();
         textFase = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        textIteracoes = new javax.swing.JTextField();
         abrir = new javax.swing.JButton();
         salvar = new javax.swing.JButton();
         buttonOK = new javax.swing.JButton();
@@ -127,29 +129,25 @@ public class JFrameFormigas extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Configurações"));
 
-        jLabel1.setText("Função Vizinhança:");
+        jLabel1.setText("raio inicial");
 
-        jLabel2.setText("Vizinhança Máxima:");
+        jLabel2.setText("raio max");
 
-        jLabel3.setText("Vizinhança Mínima:");
+        jLabel4.setText("raio controle(min p/ 2° fase)");
 
-        jLabel4.setText("Controle de Vizinhança:");
+        jLabel5.setText("alfa");
 
-        jLabel5.setText("Função Semelhança:");
+        jLabel6.setText("alfa max");
 
-        jLabel6.setText("Semelhança Máxima:");
+        jLabel7.setText("alfa min");
 
-        jLabel7.setText("Semelhança Mínima:");
-
-        jLabel8.setText("Contro de Semelhança:");
+        jLabel8.setText("alfa controle(min p/ 2° fase)");
 
         jLabel9.setText("Fase:");
 
         textSigma.setText("1");
 
         textSigmaMaximo.setText("4");
-
-        textSigmaMinimo.setText("1");
 
         textControleSigma.setText("1");
 
@@ -168,39 +166,60 @@ public class JFrameFormigas extends javax.swing.JFrame {
             }
         });
 
+        jLabel11.setText("iterações");
+
+        textIteracoes.setText("10000");
+        textIteracoes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textIteracoesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(textSigma)
-                    .addComponent(textSigmaMaximo)
-                    .addComponent(textSigmaMinimo)
-                    .addComponent(textControleSigma)
-                    .addComponent(textAlfa)
-                    .addComponent(textAlfaMaximo)
-                    .addComponent(textAlfaMinimo)
-                    .addComponent(textControleAlfa)
-                    .addComponent(textFase))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel2)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel11)
+                                .addComponent(jLabel1)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(textSigma)
+                            .addComponent(textSigmaMaximo)
+                            .addComponent(textControleSigma)
+                            .addComponent(textFase)
+                            .addComponent(textIteracoes)))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(textAlfa)
+                            .addComponent(textAlfaMaximo)
+                            .addComponent(textAlfaMinimo, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+                            .addComponent(textControleAlfa))))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel11)
+                    .addComponent(textIteracoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(textSigma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -210,13 +229,9 @@ public class JFrameFormigas extends javax.swing.JFrame {
                     .addComponent(textSigmaMaximo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(textSigmaMinimo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(textControleSigma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(14, 14, 14)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(textAlfa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -232,11 +247,11 @@ public class JFrameFormigas extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(textControleAlfa, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(textFase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         abrir.setText("Abrir");
@@ -357,7 +372,7 @@ public class JFrameFormigas extends javax.swing.JFrame {
             setFase(aF.getFase());
             textSigma.setText(String.valueOf(getSigma()));
             textSigmaMaximo.setText(String.valueOf(getSigmaMaximo()));
-            textSigmaMinimo.setText(String.valueOf(getSigmaMinimo()));
+            //textSigmaMinimo.setText(String.valueOf(getSigmaMinimo()));
             textControleSigma.setText(String.valueOf(getSigmaControle()));
             textAlfa.setText(String.valueOf(getAlfa()));
             textAlfaMaximo.setText(String.valueOf(getAlfaMaximo()));
@@ -368,6 +383,10 @@ public class JFrameFormigas extends javax.swing.JFrame {
             Logger.getLogger(JFrameFormigas.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_abrirActionPerformed
+
+    private void textIteracoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textIteracoesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textIteracoesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -410,8 +429,8 @@ public class JFrameFormigas extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -428,13 +447,22 @@ public class JFrameFormigas extends javax.swing.JFrame {
     private javax.swing.JTextField textControleAlfa;
     private javax.swing.JTextField textControleSigma;
     private javax.swing.JTextField textFase;
+    private javax.swing.JTextField textIteracoes;
     private javax.swing.JTextField textSigma;
     private javax.swing.JTextField textSigmaMaximo;
-    private javax.swing.JTextField textSigmaMinimo;
     // End of variables declaration//GEN-END:variables
 
+    
     public int getSigma() {
         return sigma;
+    }
+    
+    public int getIteracoes() {
+        return iteracoes;
+    }
+
+    public void setIteracoes(int iteracoes) {
+        this.iteracoes = iteracoes;
     }
 
     public void setSigma(int sigma) {
@@ -508,10 +536,11 @@ public class JFrameFormigas extends javax.swing.JFrame {
     private void setValores() {
         setSigma(Integer.parseInt(this.textSigma.getText()));
         setSigmaMaximo(Integer.parseInt(this.textSigmaMaximo.getText()));
-        setSigmaMinimo(Integer.parseInt(this.textSigmaMinimo.getText()));
+        setSigmaMinimo(Integer.parseInt(this.textControleSigma.getText()));
         setSigmaControle(Integer.parseInt(this.textControleSigma.getText()));
         setAlfa(Double.parseDouble(this.textAlfa.getText()));
-        setAlfaMaximo(Double.parseDouble(this.textAlfaMaximo.getText()));
+        setIteracoes(Integer.parseInt(this.textIteracoes.getText()));
+        setAlfaMaximo(Double.parseDouble(this.textAlfaMaximo.getText())); 
         setAlfaMinimo(Double.parseDouble(this.textAlfaMinimo.getText()));
         setAlfaControle(Double.parseDouble(this.textControleAlfa.getText()));
         setFase(Double.parseDouble(this.textFase.getText()));

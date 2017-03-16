@@ -46,10 +46,10 @@ public class Operações_Mat {
 
     }
 
-    public void PA_PG(int cont2, double percent1, double sigmaminimo, double sigmamaximo, double alfaminimo, double alfamaximo, double controlesigma, double controlealfa) {
-        rmais = (alfamaximo - alfaminimo) / (cont2 * percent1);
+    public void PA_PG(int cont2, double percent1, double sigma, double sigmamaximo, double alfa, double alfamaximo, double controlesigma, double controlealfa) {
+        rmais = (alfamaximo - alfa) / (cont2 * percent1);
         rmenos = (controlealfa - alfamaximo) / (cont2 * (1 - percent1));
-        qmais = Math.pow((sigmamaximo / sigmaminimo), (1 / (cont2 * percent1)));
+        qmais = Math.pow((sigmamaximo / sigma), (1 / (cont2 * percent1)));
         qmenos = Math.pow((controlesigma / sigmamaximo), (1 / (cont2 * (1 - percent1))));
     }
 
