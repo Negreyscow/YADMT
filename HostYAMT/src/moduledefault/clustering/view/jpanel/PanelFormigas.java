@@ -49,12 +49,14 @@ public final class PanelFormigas extends javax.swing.JPanel {
     interfaces.Base base;
     static Base dados;
     static Base dadosOriginal;
+    static Base backupDados;
 
     public PanelFormigas(interfaces.Base b, JFrameFormigas j) {
         initComponents();
         base = b;
         startMatrizDados();
         Operações_Mat mat = new Operações_Mat();
+        backupDados = dados;
         mat.Padronização(dados);
 //        imprimiBase();
         listaObjetos = new ArrayList<ACOClustering>();
@@ -680,24 +682,24 @@ public final class PanelFormigas extends javax.swing.JPanel {
     }//GEN-LAST:event_jSlider1StateChanged
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String[] atributos = new String[dadosOriginal.getAtributos().size() + 2];
+        String[] atributos = new String[backupDados.getAtributos().size() + 2];
         atributos[0] = "ID";
-        for (int j = 0; j < dadosOriginal.getAtributos().size(); j++) {
-            atributos[j + 1] = dadosOriginal.getAtributos().get(j);
+        for (int j = 0; j < backupDados.getAtributos().size(); j++) {
+            atributos[j + 1] = backupDados.getAtributos().get(j);
         }
         atributos[atributos.length - 1] = "Cluster_ID";
 
-        Object[][] data = new Object[dadosOriginal.getDataSet().size()][dadosOriginal.getDataSet().get(0).getAtributos().size() + 3];
-        for (int i = 0; i < dadosOriginal.getDataSet().size(); i++) {
-            data[i][0] = dadosOriginal.getDataSet().get(i).getNumero();
+        Object[][] data = new Object[backupDados.getDataSet().size()][backupDados.getDataSet().get(0).getAtributos().size() + 3];
+        for (int i = 0; i < backupDados.getDataSet().size(); i++) {
+            data[i][0] = backupDados.getDataSet().get(i).getNumero();
         }
-        for (int i = 0; i < dadosOriginal.getDataSet().size(); i++) {
-            for (int j = 0; j < dadosOriginal.getDataSet().get(0).getAtributos().size(); j++) {
-                data[i][j + 1] = dadosOriginal.getDataSet().get(i).getAtributos().get(j);
+        for (int i = 0; i < backupDados.getDataSet().size(); i++) {
+            for (int j = 0; j < backupDados.getDataSet().get(0).getAtributos().size(); j++) {
+                data[i][j + 1] = backupDados.getDataSet().get(i).getAtributos().get(j);
             }
         }
-        for (int i = 0; i < dadosOriginal.getDataSet().size(); i++) {
-            data[i][dadosOriginal.getDataSet().get(0).getAtributos().size() + 1] = dadosOriginal.getDataSet().get(i).getClasse();
+        for (int i = 0; i < backupDados.getDataSet().size(); i++) {
+            data[i][backupDados.getDataSet().get(0).getAtributos().size() + 1] = backupDados.getDataSet().get(i).getClasse();
         }
         for (int i = 0; i < clusters.size(); i++) {
             for (int j = 0; j < clusters.get(i).getGrupo().size(); j++) {
@@ -910,7 +912,7 @@ public final class PanelFormigas extends javax.swing.JPanel {
                 getBuffer().append(padrao);
             }
             
-            double vet[] = new double[dados.getAtributos().size()]; //vetor para receber o centroide
+            double vet[] = new double[backupDados.getAtributos().size()]; //vetor para receber o centroide
             
 
             /*for (int z=0; z < dadosOriginal.getAtributos().size()  - 1; z++){
@@ -920,13 +922,13 @@ public final class PanelFormigas extends javax.swing.JPanel {
             
             
             vet = avaliacao.centroide(clusters.get(i));
-            String centroide_vet = Arrays.toString(vet);
+            String centroide_vet = Arrays.toString(vet);//Converte o vetor do centroide p/string??
             System.out.println(centroide_vet);
             getBuffer().append("\n");
             getBuffer().append("\n\nCentróide: " + centroide_vet );
 
            
-            for (int z=0; z < dadosOriginal.getAtributos().size()  - 1; z++){
+            for (int z=0; z < backupDados.getAtributos().size()  - 1; z++){
                 System.out.println("  " + vet[z]);
             }
             getBuffer().append("\n\n-------------------------------------------------------\n\n");
