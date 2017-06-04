@@ -23,6 +23,7 @@ import moduledefault.clustering.visualization.FramePrincipal.TecnicasDispersao;
 public final class ACOClustering {
 
     int sigma;
+    int iteracoes;
     double sigma_auxiliar = sigma;
     double alfa;
     int cont2, cont;
@@ -124,10 +125,14 @@ public final class ACOClustering {
     public void set_alfa(double set_alfa) {
         alfa = set_alfa;
     }
-
+/*
     public void set_cont2(int colunas, int linhas) throws IOException {
         cont2 = 150 * (colunas) * linhas;
         //cont2 = 10000;
+    }  */
+    
+    public void set_cont2(int iteracoes){
+        cont2 = iteracoes;
     }
 
     public int getCont2() {
@@ -190,7 +195,7 @@ public final class ACOClustering {
             sigma_auxiliar *= matematica.getQmais();
             sigma = (int) sigma_auxiliar;
             if (alfa >= 1) {
-                alfa = alfa + matematica.getRmais() - 0.01;
+                alfa = 0.99;
             } else {
                 alfa = alfa + matematica.getRmais();
             }

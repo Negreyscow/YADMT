@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -34,6 +35,7 @@ import moduledefault.clustering.visualization.FramePrincipal.TecnicasDispersao;
 import moduledefault.clustering.visualization.panels.GraficoDispersaoSimulacao;
 import moduledefault.clustering.visualization.panels.JDialogData;
 import view.jpanel.JPanelClustering;
+
 
 /**
  *
@@ -758,14 +760,15 @@ public final class PanelFormigas extends javax.swing.JPanel {
         setOperar(c);
         listaObjetos.add(getOperar());
         getOperar().set_percent1((frameFormigas.getFase()));
-        getOperar().set_cont2(matrizDados[0].length, matrizDados.length);
+        //getOperar().set_cont2(matrizDados[0].length, matrizDados.length);
+        getOperar().set_cont2(frameFormigas.getIteracoes());
         getOperar().set_sigma(frameFormigas.getSigma());
         getOperar().set_sigmamaximo(frameFormigas.getSigmaMaximo());
-        getOperar().set_sigmaminimo(frameFormigas.getSigmaMinimo());
+        getOperar().set_sigmaminimo(frameFormigas.getSigmaControle());
         getOperar().set_controlesigma(frameFormigas.getSigmaControle());
         getOperar().set_alfa(frameFormigas.getAlfa());
         getOperar().set_alfamaximo(frameFormigas.getAlfaMaximo());
-        getOperar().set_alfaminimo(frameFormigas.getAlfaMinimo());
+        getOperar().set_alfaminimo(frameFormigas.getAlfaControle());
         getOperar().set_controlealfa(frameFormigas.getAlfaControle());
         getOperar().opera_inicial(dados);
 
@@ -876,6 +879,7 @@ public final class PanelFormigas extends javax.swing.JPanel {
 //                }
 //            }
 //        }
+    
 
         ArrayList<Integer> grupo;
 
@@ -905,8 +909,26 @@ public final class PanelFormigas extends javax.swing.JPanel {
                 }
                 getBuffer().append(padrao);
             }
+            
+            double vet[] = new double[dados.getAtributos().size()]; //vetor para receber o centroide
+            
+
+            /*for (int z=0; z < dadosOriginal.getAtributos().size()  - 1; z++){
+                System.out.println("  " + vet[z]);
+                //vet_centroide = (String) vet[z];
+            }*/
+            
+            
+            vet = avaliacao.centroide(clusters.get(i));
+            String centroide_vet = Arrays.toString(vet);
+            System.out.println(centroide_vet);
             getBuffer().append("\n");
-            getBuffer().append("\n\nCentróide: " + avaliacao.centroide(clusters.get(i)));
+            getBuffer().append("\n\nCentróide: " + centroide_vet );
+
+           
+            for (int z=0; z < dadosOriginal.getAtributos().size()  - 1; z++){
+                System.out.println("  " + vet[z]);
+            }
             getBuffer().append("\n\n-------------------------------------------------------\n\n");
 
         }

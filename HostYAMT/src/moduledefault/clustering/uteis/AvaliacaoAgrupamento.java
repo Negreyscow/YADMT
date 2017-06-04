@@ -19,25 +19,27 @@ public class AvaliacaoAgrupamento {
     private int tamanhoBase;
     private Base base;
     //
-    private float variancia;
+    private double variancia;
     private int[][] mconfusao;
-    private float acerto;
     private float medidaF;
     private float indiceAleatorio;
     private float indiceDunn;
+    private double acerto;
+
 
     public AvaliacaoAgrupamento(ArrayList<Cluster> clusters, List<String> classes, Base _base) {
         this.classes = classes;
         this.clusters = clusters;
         base = _base;
         this.tamanhoBase = base.getDataSet().size();
-        //
-        variancia();
-        matrizConfusao();
-        acerto();
+         
+        matrizConfusao(); //mecher// se a base tem classe entao executar todos as funçoes abaixo
         medidaF();
         indiceAleatorio();
+        SQE();///senao executar somente variancia e dunn()
         dunn();
+        //ajusteMatrizDeConfusao();
+        acerto();
     }
 
     public final void indiceAleatorio() {
@@ -94,7 +96,7 @@ public class AvaliacaoAgrupamento {
                 }
             }
         }
-        indiceAleatorio = (a + d) / (a + b + c + d);
+        indiceAleatorio = (a + d) / (a + b + c + d);        
     }
 
     public final void dunn() {
@@ -163,36 +165,87 @@ public class AvaliacaoAgrupamento {
         }
     }
 
-    public float centroide(Cluster cluster) {
-        float centroide = 0;
+    public double[] centroide(Cluster cluster) {
+        
+        double[] centroide = new double[base.getAtributos().size()];//
+        System.out.println(base.getAtributos().size());
+        //int[] aux = new int[cluster.getGrupo().size()];
+        int aux;
 
-        for (int i = 0; i < cluster.getGrupo().size(); i++) {
-            centroide += cluster.getGrupo().get(i).getNumero(); //soma dos padroes
+        for (int i = 0; i < cluster.getGrupo().size() - 1; i++) { //mecher // retorno do centroide deve ser um vetor, verificar k-means
+                aux = cluster.getGrupo().get(i).getNumero();//aux deve ser a posicao do padrao que esta no grupo i
+               //add exception
+                for (int k = 0; k < base.getAtributos().size() - 1; k++){
+                    centroide[k] += base.getDataSet().get(aux).getAtributos().get(k);
+                }
+            //soma dos padroes
         }
-        centroide = centroide / cluster.getGrupo().size(); //calcula centroide/media
+        for (int l = 0; l < base.getAtributos().size() - 1; l++){
+            centroide[l] = centroide[l] / cluster.getGrupo().size();
+            System.out.println(centroide[l]);
+        }
+       // centroide = centroide / cluster.getGrupo().size(); //calcula centroide/media
 
         return centroide;
     }
 
-    public final void variancia() {
-        float centro, qdesvio, sqdesvio = 0, somaqdesvio = 0;
+    
+        public final void SQE() { // mecher armazenar os centroides de cada grupo em uma matrix e  
+        double qdesvio, sqdesvio = 0, somaqdesvio = 0;
+        double[] centro = new double[base.getAtributos().size()];
         int qpadrao, somapadrao = 0;
-
-        for (Cluster cluster : clusters) {
+        //Cluster clusterss = new Cluster();
+       // double[] vetor_centroide = centroide();
+        for (Cluster cluster : clusters) { //Tipo Cluster recebe o valor de clusters
             qpadrao = cluster.getGrupo().size(); //numero de padroes no grupo
-            somapadrao += qpadrao; //todos os padroes da base
+            
+            //somapadrao += qpadrao; //todos os padroes da base
+            centro = centroide(cluster);
+            for (int j = 0; j < qpadrao; j++) {
+                for (int k = 0; k < base.getAtributos().size() - 1; k++){
+                    sqdesvio += Math.pow(base.getDataSet().get(j).getAtributos().get(k) - centro[k], 2);
+                }
+            }
+            
+            somaqdesvio += sqdesvio;//somatorios dos quadrados dos desvios entre todos os padroes de todos os grupos
+            sqdesvio = 0;
+          ////////////Fazer a variancia para todos os grupos
+        }
+        variancia = somaqdesvio;//variancia total, de todos os grupos da matriz
+    } 
+        
+        
+        
+    /*
+    public final void variancia() { // mecher armazenar os centroides de cada grupo em uma matrix e  
+        float qdesvio, sqdesvio = 0, somaqdesvio = 0;
+        double[] centro = new double[base.getAtributos().size()];
+        int qpadrao, somapadrao = 0;
+        //Cluster clusterss = new Cluster();
+       // double[] vetor_centroide = centroide();
+        int cont_aux = 0;
+        for (Cluster cluster : clusters) { //Tipo Cluster recebe o valor de clusters
+            qpadrao = cluster.getGrupo().size(); //numero de padroes no grupo
+            for(int i = 0; i < base.getAtributos().size(); i++){
+              somapadrao += Math.pow(base.getDataSet().get(cont_aux).getAtributos().get(i) - vetor_centroide[i], 2);
+            }
+            
+            //somapadrao += qpadrao; //todos os padroes da base
+            
             centro = centroide(cluster);
             for (int j = 0; j < qpadrao; j++) {
                 qdesvio = cluster.getGrupo().get(j).getNumero() - centro;
                 qdesvio = (float) Math.pow(qdesvio, 2);
                 sqdesvio += qdesvio;
             }
+            
             somaqdesvio += sqdesvio;//somatorios dos quadrados dos desvios entre todos os padroes de todos os grupos
             sqdesvio = 0;
+            cont_aux++;
             ////////////Fazer a variancia para todos os grupos
         }
         variancia = somaqdesvio / somapadrao;//variancia total, de todos os grupos da matriz
-    }
+    } */
 
     public final void matrizConfusao() {
         int gruposDesejados = classes.size();
@@ -204,11 +257,12 @@ public class AvaliacaoAgrupamento {
 
         for (int j = 0; j < gruposFormados; j++) { //Coluna = formados
             for (int i = 0; i < gruposDesejados; i++) {
-                mconfusao[i][j] = clusters.get(j).getNumClasse(classes.get(i));
+                mconfusao[i][j] = clusters.get(j).getNumClasse(classes.get(i)); 
             }
         }
         //Ajusta as posições da matriz confusao
-        for (int i = 0; i < gruposDesejados; i++) {
+        
+        for (int i = 0; i < gruposDesejados; i++) { /// mecher Criar uma funçao que receba a matrix de confusao e faça o ajuste com o codigo abaixo depois das chamadas de funçao da avaliaçao
             int aux = 0;
             int grupo = -1;
             for (int j = i; j < gruposFormados; j++) {
@@ -232,7 +286,7 @@ public class AvaliacaoAgrupamento {
                     mconfusao[k][i] = swap;
                 }
             }
-        }
+        } 
     }
 
     public final void acerto() {
@@ -338,11 +392,11 @@ public class AvaliacaoAgrupamento {
         return clusters;
     }
 
-    public float getVariancia() {
+    public double getVariancia() {
         return variancia;
     }
 
-    public void setVariancia(float variancia) {
+    public void setVariancia(double variancia) {
         this.variancia = variancia;
     }
 
@@ -354,7 +408,7 @@ public class AvaliacaoAgrupamento {
         this.mconfusao = mconfusao;
     }
 
-    public float getAcerto() {
+    public double getAcerto() {
         return acerto;
     }
 
@@ -362,7 +416,7 @@ public class AvaliacaoAgrupamento {
         return medidaF;
     }
 
-    public void setAcerto(float acerto) {
+    public void setAcerto(double acerto) {
         this.acerto = acerto;
     }
 
@@ -373,4 +427,6 @@ public class AvaliacaoAgrupamento {
     public float getIndiceAleatorio() {
         return indiceAleatorio;
     }
+    
+    
 }

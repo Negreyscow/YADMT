@@ -585,7 +585,7 @@ public class PanelHierarquicos extends javax.swing.JPanel {
             getBuffer().append("Grupos Formados:\t" + clusters.size() + "\n");
             getBuffer().append("Medida F:\t\t" + avaliacao.getMedidaF() + "\n");
             getBuffer().append("Medida R:\t\t" + avaliacao.getIndiceAleatorio() + "\n");
-            float acertos = avaliacao.getAcerto();
+            double acertos = avaliacao.getAcerto();
             getBuffer().append("Porcentagem de Acerto:\t" + acertos + "%\n");
             getBuffer().append("Viariância Total:\t" + avaliacao.getVariancia() + "\n");
 

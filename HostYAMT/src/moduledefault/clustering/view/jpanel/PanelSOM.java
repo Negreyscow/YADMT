@@ -589,7 +589,7 @@ public final class PanelSOM extends javax.swing.JPanel {
         jTextArea.append("Medida R:\t\t" + avaliacao.getIndiceAleatorio() + "\n");
         jTextArea.append("Índice Dunn:\t\t" + avaliacao.getIndiceDunn() + "\n");
 
-        float acertos = avaliacao.getAcerto();
+        double acertos = avaliacao.getAcerto();
         jTextArea.append("Porcentagem de Acerto:\t" + acertos + "%\n");
 
         jTextArea.append("\nMatriz Confusão:\n");
